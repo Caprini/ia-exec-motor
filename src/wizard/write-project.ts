@@ -14,6 +14,9 @@ import {
   renderAgentsMd,
   renderReadme,
   renderGitignore,
+  renderPullRequestTemplate,
+  renderIssueTemplateConfig,
+  renderChangelog,
 } from "./templates/index.js";
 
 export interface WriteProjectOptions {
@@ -55,4 +58,7 @@ export function writeProject(blueprint: ProjectBlueprint, outDir: string, option
   write("AGENTS.md", renderAgentsMd(blueprint), "AGENTS.md");
   write("README.md", renderReadme(blueprint), "README.md");
   write(".gitignore", renderGitignore(blueprint), ".gitignore");
+  write(".github/pull_request_template.md", renderPullRequestTemplate(blueprint), ".github/pull_request_template.md");
+  write(".github/ISSUE_TEMPLATE/config.yml", renderIssueTemplateConfig(blueprint), ".github/ISSUE_TEMPLATE/config.yml");
+  write("CHANGELOG.md", renderChangelog(blueprint), "CHANGELOG.md");
 }

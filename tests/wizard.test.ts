@@ -28,7 +28,7 @@ describe("buildBlueprint", () => {
     assert.strictEqual(bp.qualityProfile, "Standard");
     assert.deepStrictEqual(bp.governanceToggles, FIXTURE_ANSWERS.governanceToggles);
     assert.strictEqual(bp.generatedBy, "ia-exec-motor");
-    assert.strictEqual(bp.generatedVersion, "0.5.1");
+    assert.strictEqual(bp.generatedVersion, "0.5.2");
   });
 
   it("Strict → strictMode true y toggles requireNoRegression/requireLogs activos", () => {
@@ -101,6 +101,9 @@ describe("writeProject", () => {
       "AGENTS.md",
       "README.md",
       ".gitignore",
+      ".github/pull_request_template.md",
+      ".github/ISSUE_TEMPLATE/config.yml",
+      "CHANGELOG.md",
     ];
     for (const rel of required) {
       assert.ok(existsSync(join(outDir, rel)), `debe existir ${rel}`);
@@ -117,6 +120,22 @@ describe("writeProject", () => {
     const raw1 = readFileSync(join(out1, "blueprint", "project.json"), "utf-8");
     const raw2 = readFileSync(join(out2, "blueprint", "project.json"), "utf-8");
     assert.strictEqual(raw1, raw2);
+  });
+
+  it("genera .github templates y CHANGELOG (Repo Bootstrap)", () => {
+    const tmp = makeTmpDir();
+    const outDir = join(tmp, "dest");
+    const bp = buildBlueprint(FIXTURE_ANSWERS);
+    writeProject(bp, outDir);
+    const prTemplate = readFileSync(join(outDir, ".github", "pull_request_template.md"), "utf-8");
+    const issueConfig = readFileSync(join(outDir, ".github", "ISSUE_TEMPLATE", "config.yml"), "utf-8");
+    const changelog = readFileSync(join(outDir, "CHANGELOG.md"), "utf-8");
+    assert.ok(prTemplate.includes("Checklist QA"));
+    assert.ok(prTemplate.includes("CHECKLIST_QA.md"));
+    assert.ok(issueConfig.includes("blank_issues_enabled: false"));
+    assert.ok(changelog.includes("[0.1.0]"));
+    assert.ok(changelog.includes("mi-app-test"));
+    assert.ok(changelog.includes("App de prueba"));
   });
 
   it("determinismo: dos buildBlueprint con mismas respuestas → mismo JSON", () => {

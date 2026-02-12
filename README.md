@@ -16,6 +16,7 @@ npm run cli -- wizard --project-name demo --stack node-ts --profile Standard --d
 
 - **Colisión:** si `../<projectName>` ya existe, el wizard **aborta** con error. Usa `--force` para sobrescribir.
 - **Stacks:** `node-ts`, `nextjs`, `python`. **Perfiles:** `Exploratory`, `Standard`, `Strict`, `Production`.
+- **Artefactos generados:** blueprint, docs, `.cursor/rules`, `.github/pull_request_template.md`, `.github/ISSUE_TEMPLATE/config.yml`, `CHANGELOG.md`, `README.md`, `AGENTS.md`, etc.
 - Schema del blueprint: [docs/ai-motor/70_BLUEPRINT_SCHEMA.md](docs/ai-motor/70_BLUEPRINT_SCHEMA.md).
 
 ## Project Direction

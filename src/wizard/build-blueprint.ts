@@ -6,7 +6,7 @@ import { DEFAULT_GOVERNANCE_TOGGLES, isStrictProfile } from "./types.js";
 
 const BLUEPRINT_VERSION = "0.1";
 const GENERATED_BY = "ia-exec-motor";
-const GENERATED_VERSION = "0.5.1";
+const GENERATED_VERSION = "0.5.2";
 
 const SLUG_REGEX = /^[a-z0-9-]+$/;
 

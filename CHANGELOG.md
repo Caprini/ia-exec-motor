@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.5.2] - 2025-02-12
+
+- Repo Bootstrap: el wizard genera en el proyecto destino `.github/pull_request_template.md`, `.github/ISSUE_TEMPLATE/config.yml` y `CHANGELOG.md` mínimo. Alineación con RG-02.
+
 ## [0.5.1] - 2025-02-12
 
 - Wizard Hardening: modo no-interactivo con flags (`--project-name`, `--stack`, `--profile`, `--desc`, `--visibility`, `--force`).

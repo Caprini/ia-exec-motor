@@ -158,6 +158,47 @@ Proyecto generado por **ia-exec-motor** Wizard v0. Blueprint en \`blueprint/proj
 `;
 }
 
+/** Plantilla de PR con checklist QA. Determinista. */
+export function renderPullRequestTemplate(bp: ProjectBlueprint): string {
+  const g = bp.governanceToggles;
+  const items: string[] = [
+    "## Descripción",
+    "",
+    "<!-- Describir brevemente los cambios -->",
+    "",
+    "## Checklist QA",
+    "",
+    "Ver `CHECKLIST_QA.md` para el perfil completo.",
+    "",
+  ];
+  if (g.requireTests) items.push("- [ ] Tests pasan");
+  if (g.requireNoRegression) items.push("- [ ] No-regresión: suite en verde");
+  if (g.scopeGuard) items.push("- [ ] Cambios dentro del alcance declarado del ticket");
+  items.push("");
+  return items.join("\n");
+}
+
+/** Config del selector de issues (GitHub). Determinista. */
+export function renderIssueTemplateConfig(bp: ProjectBlueprint): string {
+  return `blank_issues_enabled: false
+contact_links:
+  - name: Documentación del proyecto
+    url: https://github.com
+    about: Ver README.md y documentación antes de abrir issues.
+`;
+}
+
+/** CHANGELOG mínimo (Keep a Changelog, Sin timestamps dinámicos). Determinista. */
+export function renderChangelog(bp: ProjectBlueprint): string {
+  return `# Changelog
+
+## [0.1.0] - 2025-02-12
+
+- Proyecto inicial: ${bp.projectName}
+- ${bp.description}
+`;
+}
+
 export function renderGitignore(bp: ProjectBlueprint): string {
   if (bp.stack === "python") {
     return `# Python
