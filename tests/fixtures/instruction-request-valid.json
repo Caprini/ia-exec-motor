@@ -1,0 +1,22 @@
+{
+  "role": "Ingeniero de Software Senior",
+  "task": "Implementar un servicio de validación de OTP",
+  "specifications": [
+    "Usar tipado fuerte",
+    "Excluir dependencias externas no autorizadas",
+    "Seguir convenciones snake_case"
+  ],
+  "acceptance_criteria": [
+    "El OTP debe tener exactamente 6 dígitos",
+    "La vigencia debe ser de 5 minutos",
+    "Debe incluir tests de regresión"
+  ],
+  "output_format": "Bloque de código TypeScript con documentación JSDoc",
+  "context_references": [
+    "file://.cursor/rules/agents.md",
+    "file://context/database_schema.sql"
+  ],
+  "execution_config": {
+    "strictMode": true
+  }
+}

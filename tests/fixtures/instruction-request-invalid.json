@@ -1,0 +1,8 @@
+{
+  "role": "Dev",
+  "task": "Crea una función",
+  "specifications": [],
+  "execution_config": {
+    "strictMode": true
+  }
+}

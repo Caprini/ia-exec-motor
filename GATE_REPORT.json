@@ -1,0 +1,123 @@
+{
+  "version": "1.0",
+  "timestamp": "2026-02-12T13:11:25.109Z",
+  "profileId": "Standard",
+  "profileStrictMode": false,
+  "gates": [
+    {
+      "gateId": "G-01",
+      "status": "PASS",
+      "severity": "WARNING",
+      "message": "Contexto de anclaje presente o no requerido."
+    },
+    {
+      "gateId": "G-02",
+      "status": "PASS",
+      "severity": "WARNING",
+      "message": "Anatomía del prompt cumplida."
+    },
+    {
+      "gateId": "G-03",
+      "status": "WARN",
+      "severity": "INFO",
+      "message": "Gate G-03 no implementado en MVP (not_implemented).",
+      "findings": [
+        "Evaluación no disponible"
+      ],
+      "remediation": "Implementar evaluador cuando se requiera."
+    },
+    {
+      "gateId": "G-04",
+      "status": "WARN",
+      "severity": "ERROR",
+      "message": "Gate G-04 no implementado en MVP (not_implemented).",
+      "findings": [
+        "Evaluación no disponible"
+      ],
+      "remediation": "Implementar evaluador cuando se requiera."
+    },
+    {
+      "gateId": "G-05",
+      "status": "WARN",
+      "severity": "WARNING",
+      "message": "Gate G-05 no implementado en MVP (not_implemented).",
+      "findings": [
+        "Evaluación no disponible"
+      ],
+      "remediation": "Implementar evaluador cuando se requiera."
+    },
+    {
+      "gateId": "G-06",
+      "status": "WARN",
+      "severity": "INFO",
+      "message": "Gate G-06 no implementado en MVP (not_implemented).",
+      "findings": [
+        "Evaluación no disponible"
+      ],
+      "remediation": "Implementar evaluador cuando se requiera."
+    },
+    {
+      "gateId": "G-07",
+      "status": "WARN",
+      "severity": "WARNING",
+      "message": "Gate G-07 no implementado en MVP (not_implemented).",
+      "findings": [
+        "Evaluación no disponible"
+      ],
+      "remediation": "Implementar evaluador cuando se requiera."
+    },
+    {
+      "gateId": "G-08",
+      "status": "WARN",
+      "severity": "INFO",
+      "message": "Gate G-08 no implementado en MVP (not_implemented).",
+      "findings": [
+        "Evaluación no disponible"
+      ],
+      "remediation": "Implementar evaluador cuando se requiera."
+    },
+    {
+      "gateId": "G-09",
+      "status": "WARN",
+      "severity": "WARNING",
+      "message": "Gate G-09 no implementado en MVP (not_implemented).",
+      "findings": [
+        "Evaluación no disponible"
+      ],
+      "remediation": "Implementar evaluador cuando se requiera."
+    },
+    {
+      "gateId": "G-10",
+      "status": "WARN",
+      "severity": "WARNING",
+      "message": "Gate G-10 no implementado en MVP (not_implemented).",
+      "findings": [
+        "Evaluación no disponible"
+      ],
+      "remediation": "Implementar evaluador cuando se requiera."
+    },
+    {
+      "gateId": "G-11",
+      "status": "PASS",
+      "severity": "WARNING",
+      "message": "Criterio de no-regresión referenciado en acceptance_criteria (MVP no ejecuta tests)."
+    },
+    {
+      "gateId": "G-12",
+      "status": "PASS",
+      "severity": "WARNING",
+      "message": "Logging estructurado no verificado en MVP (sin inspección de código)."
+    },
+    {
+      "gateId": "G-13",
+      "status": "PASS",
+      "severity": "ERROR",
+      "message": "Cumplimiento production no verificado en MVP."
+    }
+  ],
+  "summary": {
+    "pass": 5,
+    "fail": 0,
+    "warn": 8
+  }
+}
