@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.4.0] - 2025-02-12
+
+- Added Repo Validator v0 (RG-01..RG-05) with fixtures and tests
+
 ## [0.3.0] - 2025-02-12
 
 - Added formal product roadmap (00_ROADMAP_V1.md)
