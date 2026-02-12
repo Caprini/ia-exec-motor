@@ -4,3 +4,6 @@ dist/
 .env
 .env.*
 *.log
+
+# Cursor plans
+.cursor/plans/
