@@ -3,7 +3,7 @@
  * Acepta defaults (p. ej. desde flags CLI): si todos los obligatorios vienen en defaults, no usa readline.
  */
 import { createInterface } from "node:readline/promises";
-import type { WizardAnswers, GovernanceToggles, Stack, RepoVisibility } from "./types.js";
+import type { WizardAnswers, GovernanceToggles, Stack, RepoVisibility, LicenseId } from "./types.js";
 import { DEFAULT_GOVERNANCE_TOGGLES } from "./types.js";
 import type { WizardCLIOptions } from "./types.js";
 import type { QualityProfileId } from "../types.js";
@@ -12,6 +12,7 @@ const SLUG_REGEX = /^[a-z0-9-]+$/;
 export const STACKS: Stack[] = ["node-ts", "python", "nextjs"];
 export const PROFILES: QualityProfileId[] = ["Exploratory", "Standard", "Strict", "Production"];
 export const VISIBILITY: RepoVisibility[] = ["public", "private"];
+export const LICENSES: LicenseId[] = ["MIT", "Apache-2.0", "None"];
 
 function toSlug(input: string): string {
   return input
@@ -37,21 +38,44 @@ export function answersFromOptions(opts?: WizardCLIOptions): Partial<WizardAnswe
   if (opts.stack !== undefined) partial.stack = opts.stack;
   if (opts.profile !== undefined) partial.qualityProfile = opts.profile;
   if (opts.visibility !== undefined) partial.repoVisibility = opts.visibility;
+  if (opts.license !== undefined && LICENSES.includes(opts.license)) partial.license = opts.license;
+  if (opts.author !== undefined) partial.author = opts.author;
+  if (opts.codeowners !== undefined && Array.isArray(opts.codeowners)) partial.codeowners = opts.codeowners;
   return Object.keys(partial).length > 0 ? partial : undefined;
 }
 
-function hasAllRequiredDefaults(d: Partial<WizardAnswers>): d is Pick<WizardAnswers, "projectName" | "description" | "stack" | "qualityProfile" | "repoVisibility"> {
-  return (
-    typeof d.projectName === "string" && SLUG_REGEX.test(d.projectName) &&
-    typeof d.description === "string" && d.description.trim().length > 0 &&
-    d.stack !== undefined && STACKS.includes(d.stack) &&
-    d.qualityProfile !== undefined && PROFILES.includes(d.qualityProfile) &&
-    d.repoVisibility !== undefined && VISIBILITY.includes(d.repoVisibility)
-  );
+function parseCodeowners(input: string): string[] {
+  return input
+    .split(",")
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0);
+}
+
+function hasAllRequiredDefaults(d: Partial<WizardAnswers>): d is WizardAnswers {
+  if (
+    typeof d.projectName !== "string" || !SLUG_REGEX.test(d.projectName) ||
+    typeof d.description !== "string" || d.description.trim().length === 0 ||
+    d.stack === undefined || !STACKS.includes(d.stack) ||
+    d.qualityProfile === undefined || !PROFILES.includes(d.qualityProfile) ||
+    d.repoVisibility === undefined || !VISIBILITY.includes(d.repoVisibility) ||
+    d.license === undefined || !LICENSES.includes(d.license) ||
+    !Array.isArray(d.codeowners)
+  ) {
+    return false;
+  }
+  // author condicional: cuando license === "None" es irrelevante (no se genera LICENSE)
+  if (d.license !== "None") {
+    if (typeof d.author !== "string" || d.author.trim().length === 0) return false;
+  }
+  return true;
 }
 
 export async function runPrompt(defaults?: Partial<WizardAnswers>): Promise<WizardAnswers> {
   if (defaults && hasAllRequiredDefaults(defaults)) {
+    const author =
+      defaults.license === "None"
+        ? ""
+        : (defaults.author as string).trim();
     return {
       projectName: defaults.projectName,
       description: defaults.description.trim(),
@@ -59,6 +83,9 @@ export async function runPrompt(defaults?: Partial<WizardAnswers>): Promise<Wiza
       stack: defaults.stack,
       qualityProfile: defaults.qualityProfile,
       governanceToggles: { ...DEFAULT_GOVERNANCE_TOGGLES },
+      license: defaults.license,
+      author,
+      codeowners: [...defaults.codeowners],
     };
   }
 
@@ -113,6 +140,31 @@ export async function runPrompt(defaults?: Partial<WizardAnswers>): Promise<Wiza
   if (vis === "private") repoVisibility = "private";
   else if (vis === "public") repoVisibility = "public";
 
+  let license: LicenseId = (defaults?.license && LICENSES.includes(defaults.license) ? defaults.license : "MIT") as LicenseId;
+  while (true) {
+    const raw = await rl.question(`license (${LICENSES.join(" / ")}) [${license}]: `);
+    const v = (raw.trim() || license) as LicenseId;
+    if (LICENSES.includes(v)) {
+      license = v;
+      break;
+    }
+    console.error("[WARN] Elige uno de: " + LICENSES.join(", "));
+  }
+
+  let author = typeof defaults?.author === "string" ? defaults.author.trim() : "";
+  if (license !== "None") {
+    while (!author) {
+      author = (await rl.question("author (para LICENSE): ")).trim();
+      if (!author) console.error("[WARN] author no puede estar vacío cuando license no es None.");
+    }
+  }
+
+  let codeowners: string[] = Array.isArray(defaults?.codeowners) ? [...defaults.codeowners] : ["@Caprini"];
+  const coRaw = await rl.question(`codeowners (separados por comas, ej. @Caprini,@Fabio) [${codeowners.join(",")}]: `);
+  if (coRaw.trim()) {
+    codeowners = parseCodeowners(coRaw);
+  }
+
   const toggles: GovernanceToggles = { ...DEFAULT_GOVERNANCE_TOGGLES };
 
   const askToggle = async (key: keyof GovernanceToggles, label: string, defaultVal: boolean): Promise<void> => {
@@ -136,5 +188,8 @@ export async function runPrompt(defaults?: Partial<WizardAnswers>): Promise<Wiza
     stack,
     qualityProfile,
     governanceToggles: toggles,
+    license,
+    author,
+    codeowners,
   };
 }
