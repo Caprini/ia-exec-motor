@@ -1,0 +1,1 @@
+{"name":"repo-invalid-fixture","version":"invalid","scripts":{"test":"exit 1"}}

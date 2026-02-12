@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc",
     "cli": "tsx src/cli.ts",
-    "test": "node --import tsx --test tests/validator.test.ts tests/gates.test.ts tests/reporter.test.ts"
+    "test": "node --import tsx --test tests/validator.test.ts tests/gates.test.ts tests/reporter.test.ts tests/repo-validator.test.ts"
   },
   "keywords": [],
   "author": "",
