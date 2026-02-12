@@ -8,6 +8,7 @@ const SLUG_REGEX = /^[a-z0-9-]+$/;
 const STACKS = ["node-ts", "nextjs", "python"] as const;
 const PROFILES = ["Exploratory", "Standard", "Strict", "Production"] as const;
 const VISIBILITY = ["public", "private"] as const;
+const LICENSES = ["MIT", "Apache-2.0", "None"] as const;
 const TOGGLE_KEYS: (keyof GovernanceToggles)[] = [
   "plannerExecutorSplit",
   "requireTests",
@@ -79,6 +80,33 @@ export function validateBlueprint(bp: unknown): BlueprintValidationResult {
     errors.push("Campo obligatorio 'governanceToggles' debe estar presente.");
   } else if (!isGovernanceToggles(o.governanceToggles)) {
     errors.push("'governanceToggles' debe ser un objeto con las claves booleanas: plannerExecutorSplit, requireTests, requireNoRegression, requireLogs, scopeGuard.");
+  }
+
+  if (!("license" in o) || typeof o.license !== "string") {
+    errors.push("Campo obligatorio 'license' debe ser un string.");
+  } else if (!LICENSES.includes(o.license as "MIT" | "Apache-2.0" | "None")) {
+    errors.push("'license' debe ser uno de: MIT, Apache-2.0, None.");
+  }
+
+  if (!("author" in o) || typeof o.author !== "string") {
+    errors.push("Campo obligatorio 'author' debe ser un string.");
+  } else if (o.license !== "None" && (o.author as string).trim().length === 0) {
+    errors.push("'author' no puede estar vacío cuando license no es None.");
+  }
+
+  if (!Array.isArray(o.codeowners)) {
+    errors.push("Campo obligatorio 'codeowners' debe ser un array de strings.");
+  } else {
+    for (let i = 0; i < o.codeowners.length; i++) {
+      const entry = o.codeowners[i];
+      if (typeof entry !== "string") {
+        errors.push(`'codeowners[${i}]' debe ser un string.`);
+      } else if (entry.trim().length === 0) {
+        errors.push(`'codeowners[${i}]' no puede estar vacío.`);
+      } else if (!entry.trim().startsWith("@")) {
+        errors.push(`'codeowners[${i}]' debe empezar por @ (ej. @usuario).`);
+      }
+    }
   }
 
   if (typeof o.generatedBy !== "string" || (o.generatedBy as string).length === 0) {

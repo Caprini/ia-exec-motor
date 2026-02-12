@@ -1,7 +1,7 @@
 /**
  * CLI ia-exec-motor — punto de entrada.
  * Uso: npx tsx src/cli.ts <path-to-instruction-request.json>
- *      npx tsx src/cli.ts wizard [--project-name <slug>] [--stack ...] [--profile ...] [--desc "..."] [--visibility ...] [--force]
+ *      npx tsx src/cli.ts wizard [--project-name <slug>] [--stack ...] [--profile ...] [--desc "..."] [--visibility ...] [--license MIT|Apache-2.0|None] [--author "..."] [--codeowners "@a,@b"] [--force]
  */
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -13,7 +13,8 @@ import { writeGateReport, writeExecReport } from "./reporter.js";
 import { writeExportables } from "./exportables.js";
 import { runWizard } from "./wizard/index.js";
 import type { WizardCLIOptions } from "./wizard/types.js";
-import type { Stack, RepoVisibility } from "./wizard/types.js";
+import type { Stack, RepoVisibility, LicenseId } from "./wizard/types.js";
+import { LICENSES } from "./wizard/prompt.js";
 import type { QualityProfileId } from "./types.js";
 
 const STACKS: Stack[] = ["node-ts", "python", "nextjs"];
@@ -37,6 +38,13 @@ function parseWizardFlags(argv: string[]): WizardCLIOptions {
     } else if (arg === "--visibility" && argv[i + 1] !== undefined) {
       const v = argv[++i].toLowerCase();
       if (VISIBILITY.includes(v as RepoVisibility)) opts.visibility = v as RepoVisibility;
+    } else if (arg === "--license" && argv[i + 1] !== undefined) {
+      const v = argv[++i];
+      if (LICENSES.includes(v as LicenseId)) opts.license = v as LicenseId;
+    } else if (arg === "--author" && argv[i + 1] !== undefined) {
+      opts.author = argv[++i];
+    } else if (arg === "--codeowners" && argv[i + 1] !== undefined) {
+      opts.codeowners = argv[++i].split(",").map((s) => s.trim()).filter(Boolean);
     } else if (arg === "--force") {
       opts.force = true;
     }

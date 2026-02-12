@@ -14,6 +14,9 @@ export function renderProjectJson(bp: ProjectBlueprint): string {
     qualityProfile: bp.qualityProfile,
     strictMode: bp.strictMode,
     governanceToggles: bp.governanceToggles,
+    license: bp.license,
+    author: bp.author,
+    codeowners: bp.codeowners,
     generatedBy: bp.generatedBy,
     generatedVersion: bp.generatedVersion,
   };
@@ -362,6 +365,23 @@ ${conventions}
 }
 
 export function renderContextDecisions(bp: ProjectBlueprint): string {
+  const licenseDecision =
+    bp.license === "None"
+      ? ""
+      : `
+- **Decision:** Licencia ${bp.license}.
+- **Rationale:** Definida en el blueprint del proyecto.
+- **Consequences:** Uso y redistribución según términos ${bp.license}.`;
+  const codeownersDecision =
+    bp.codeowners.length > 0
+      ? `
+- **Decision:** Owners: CODEOWNERS (${bp.codeowners.join(", ")}).
+- **Rationale:** Asignación de responsabilidad de revisión desde el blueprint.
+- **Consequences:** Repo con archivo CODEOWNERS; ajustar según equipos reales si aplica.`
+      : `
+- **Decision:** No generar CODEOWNERS.
+- **Rationale:** codeowners vacío en el blueprint.
+- **Consequences:** Sin archivo CODEOWNERS en el repo.`;
   return `# Decision log — ${bp.projectName}
 
 Formato: Decision / Rationale / Consequences.
@@ -371,15 +391,7 @@ Regla: no editar historia; nuevas decisiones se añaden al final.
 ## Decisiones iniciales (proyecto generado)
 - **Decision:** Stack ${bp.stack}, perfil de calidad ${bp.qualityProfile}, strictMode ${bp.strictMode}.
 - **Rationale:** Definido en el blueprint del proyecto para gobernanza y límites de alcance.
-- **Consequences:** Alcance y gates según ROADMAP.md y CHECKLIST_QA.md; no inventar dependencias; tests según perfil.
-
-- **Decision:** Licencia MIT.
-- **Rationale:** Estándar permisivo para proyectos generados por el wizard.
-- **Consequences:** Uso y redistribución según términos MIT.
-
-- **Decision:** Owners: CODEOWNERS (placeholder).
-- **Rationale:** Asignación de responsabilidad de revisión; configurable en futuras versiones del blueprint.
-- **Consequences:** Repo con archivo CODEOWNERS; sustituir placeholder por equipos reales.
+- **Consequences:** Alcance y gates según ROADMAP.md y CHECKLIST_QA.md; no inventar dependencias; tests según perfil.${licenseDecision}${codeownersDecision}
 `;
 }
 
@@ -496,10 +508,13 @@ Guía operativa para nuevos contribuidores.
 `;
 }
 
-export function renderLicenseMIT(): string {
-  return `MIT License
+const LICENSE_YEAR = 2026;
 
-Copyright (c) 2026
+export function renderLicense(bp: ProjectBlueprint): string {
+  if (bp.license === "MIT") {
+    return `MIT License
+
+Copyright (c) ${LICENSE_YEAR} ${bp.author}
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -519,9 +534,30 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 `;
+  }
+  if (bp.license === "Apache-2.0") {
+    return `Apache License
+Version 2.0, January 2004
+http://www.apache.org/licenses/
+
+Copyright (c) ${LICENSE_YEAR} ${bp.author}
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+`;
+  }
+  return "";
 }
 
-export function renderCodeowners(): string {
-  return `* @Caprini
-`;
+export function renderCodeowners(bp: ProjectBlueprint): string {
+  return bp.codeowners.map((entry) => `* ${entry}`).join("\n") + (bp.codeowners.length ? "\n" : "");
 }

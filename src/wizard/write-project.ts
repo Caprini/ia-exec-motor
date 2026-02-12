@@ -27,7 +27,7 @@ import {
   renderDocsDecisions,
   renderDocsQA,
   renderDocsOnboarding,
-  renderLicenseMIT,
+  renderLicense,
   renderCodeowners,
 } from "./templates/index.js";
 
@@ -84,6 +84,10 @@ export function writeProject(blueprint: ProjectBlueprint, outDir: string, option
   write("docs/DECISIONS.md", renderDocsDecisions(blueprint), "docs/DECISIONS.md");
   write("docs/QA.md", renderDocsQA(blueprint), "docs/QA.md");
   write("docs/ONBOARDING.md", renderDocsOnboarding(blueprint), "docs/ONBOARDING.md");
-  write("LICENSE", renderLicenseMIT(), "LICENSE");
-  write("CODEOWNERS", renderCodeowners(), "CODEOWNERS");
+  if (blueprint.license !== "None") {
+    write("LICENSE", renderLicense(blueprint), "LICENSE");
+  }
+  if (blueprint.codeowners.length > 0) {
+    write("CODEOWNERS", renderCodeowners(blueprint), "CODEOWNERS");
+  }
 }

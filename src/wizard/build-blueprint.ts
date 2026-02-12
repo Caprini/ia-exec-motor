@@ -4,9 +4,9 @@
 import type { ProjectBlueprint, WizardAnswers, GovernanceToggles } from "./types.js";
 import { DEFAULT_GOVERNANCE_TOGGLES, isStrictProfile } from "./types.js";
 
-const BLUEPRINT_VERSION = "0.1";
+const BLUEPRINT_VERSION = "0.2";
 const GENERATED_BY = "ia-exec-motor";
-const GENERATED_VERSION = "0.5.5";
+const GENERATED_VERSION = "0.5.6";
 
 const SLUG_REGEX = /^[a-z0-9-]+$/;
 
@@ -17,6 +17,15 @@ function toSlug(name: string): string {
     .replace(/\s+/g, "-")
     .replace(/[^a-z0-9-]/g, "");
   return s || "project";
+}
+
+/** Normaliza entry para CODEOWNERS: trim y añade @ si falta. Orden estable para determinismo. */
+function normalizeCodeowners(entries: string[]): string[] {
+  const normalized = entries.map((s) => {
+    const t = s.trim();
+    return t.startsWith("@") ? t : `@${t}`;
+  });
+  return [...normalized].sort();
 }
 
 export function buildBlueprint(answers: WizardAnswers): ProjectBlueprint {
@@ -40,6 +49,9 @@ export function buildBlueprint(answers: WizardAnswers): ProjectBlueprint {
     qualityProfile: answers.qualityProfile,
     strictMode,
     governanceToggles,
+    license: answers.license,
+    author: answers.author.trim(),
+    codeowners: normalizeCodeowners(answers.codeowners),
     generatedBy: GENERATED_BY,
     generatedVersion: GENERATED_VERSION,
   };

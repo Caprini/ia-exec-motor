@@ -6,6 +6,7 @@ import type { QualityProfileId } from "../types.js";
 
 export type Stack = "node-ts" | "python" | "nextjs";
 export type RepoVisibility = "public" | "private";
+export type LicenseId = "MIT" | "Apache-2.0" | "None";
 
 export interface GovernanceToggles {
   plannerExecutorSplit: boolean;
@@ -32,6 +33,9 @@ export interface ProjectBlueprint {
   qualityProfile: QualityProfileId;
   strictMode: boolean;
   governanceToggles: GovernanceToggles;
+  license: LicenseId;
+  author: string;
+  codeowners: string[];
   generatedBy: string;
   generatedVersion: string;
 }
@@ -43,6 +47,9 @@ export interface WizardAnswers {
   stack: Stack;
   qualityProfile: QualityProfileId;
   governanceToggles: GovernanceToggles;
+  license: LicenseId;
+  author: string;
+  codeowners: string[];
 }
 
 /** Opciones del wizard desde CLI (modo no-interactivo o mixto). */
@@ -52,6 +59,9 @@ export interface WizardCLIOptions {
   profile?: QualityProfileId;
   desc?: string;
   visibility?: RepoVisibility;
+  license?: LicenseId;
+  author?: string;
+  codeowners?: string[];
   force?: boolean;
 }
 
