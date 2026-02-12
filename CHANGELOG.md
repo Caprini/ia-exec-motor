@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.5.1] - 2025-02-12
+
+- Wizard Hardening: modo no-interactivo con flags (`--project-name`, `--stack`, `--profile`, `--desc`, `--visibility`, `--force`).
+- Control de colisión: si `../<projectName>` ya existe, el wizard aborta por defecto; con `--force` sobrescribe.
+- Blueprint schema versionado: `src/schemas/blueprint.schema.json` y documentación en `docs/ai-motor/70_BLUEPRINT_SCHEMA.md`.
+- Validador del blueprint antes de escribir archivos: si la validación falla, se aborta sin escribir.
+
+## [0.5.0] - 2025-02-12
+
+- Wizard v0: CLI interactivo para generar Project Blueprint y artefactos de gobernanza en `../<projectName>`. Stacks: node-ts, python, nextjs. Sin integración GitHub.
+
 ## [0.4.0] - 2025-02-12
 
 - Added Repo Validator v0 (RG-01..RG-05) with fixtures and tests

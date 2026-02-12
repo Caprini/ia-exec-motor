@@ -1,13 +1,13 @@
 {
   "name": "ia-exec-motor",
-  "version": "0.4.0",
+  "version": "0.5.1",
   "description": "CLI que valida InstructionRequest, aplica Quality Profile + Gates y genera reportes",
   "type": "module",
   "main": "dist/cli.js",
   "scripts": {
     "build": "tsc",
     "cli": "tsx src/cli.ts",
-    "test": "node --import tsx --test tests/validator.test.ts tests/gates.test.ts tests/reporter.test.ts tests/repo-validator.test.ts"
+    "test": "node --import tsx --test tests/validator.test.ts tests/gates.test.ts tests/reporter.test.ts tests/repo-validator.test.ts tests/wizard.test.ts"
   },
   "keywords": [],
   "author": "",

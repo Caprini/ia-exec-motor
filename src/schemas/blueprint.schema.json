@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ProjectBlueprint",
+  "description": "Schema del blueprint de proyecto generado por ia-exec-motor Wizard v0",
+  "type": "object",
+  "required": [
+    "version",
+    "projectName",
+    "description",
+    "repoVisibility",
+    "stack",
+    "qualityProfile",
+    "strictMode",
+    "governanceToggles",
+    "generatedBy",
+    "generatedVersion"
+  ],
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Versión del schema del blueprint (ej. 0.1)"
+    },
+    "projectName": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Slug del proyecto: solo minúsculas, números y guiones"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Descripción del proyecto (1-2 frases)"
+    },
+    "repoVisibility": {
+      "type": "string",
+      "enum": ["public", "private"],
+      "description": "Visibilidad del repositorio"
+    },
+    "stack": {
+      "type": "string",
+      "enum": ["node-ts", "nextjs", "python"],
+      "description": "Stack tecnológico soportado en v0"
+    },
+    "qualityProfile": {
+      "type": "string",
+      "enum": ["Exploratory", "Standard", "Strict", "Production"],
+      "description": "Perfil de calidad"
+    },
+    "strictMode": {
+      "type": "boolean",
+      "description": "Modo estricto (derivado de Strict/Production)"
+    },
+    "governanceToggles": {
+      "type": "object",
+      "required": [
+        "plannerExecutorSplit",
+        "requireTests",
+        "requireNoRegression",
+        "requireLogs",
+        "scopeGuard"
+      ],
+      "properties": {
+        "plannerExecutorSplit": { "type": "boolean" },
+        "requireTests": { "type": "boolean" },
+        "requireNoRegression": { "type": "boolean" },
+        "requireLogs": { "type": "boolean" },
+        "scopeGuard": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "generatedBy": {
+      "type": "string",
+      "description": "Herramienta que generó el blueprint"
+    },
+    "generatedVersion": {
+      "type": "string",
+      "description": "Versión de la herramienta generadora"
+    }
+  },
+  "additionalProperties": false
+}
