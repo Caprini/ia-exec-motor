@@ -1,0 +1,16 @@
+---
+description: Gate de alcance — evita cambios fuera de scope declarado
+globs:
+alwaysApply: true
+---
+
+# SCOPE-01 — Scope Guard
+
+Cuando la tarea declare restricciones de alcance explícitas (ej. "solo documentación", "SOLO docs", "no modificar src/"):
+
+1. **Prohibido**: modificar `src/`, `tests/`, o artefactos generados (GATE_REPORT.json, EXEC_REPORT.md) a menos que sean objetivo explícito del ticket.
+2. **Obligatorio**: si el ejecutor detecta que haría falta tocar código para completar la tarea, debe **parar** y devolver:
+   "Bloqueado por alcance (SCOPE-01). Propongo ticket separado: [descripción breve]"
+3. **Excepción**: cambios en `package.json` limitados a `version` cuando el ticket lo pida explícitamente.
+
+Esta regla aplica a cualquier agente o ejecutor que procese la tarea.
