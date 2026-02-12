@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.5.3] - 2026-02-12
+
+- Wizard: ROADMAP.md del proyecto destino ahora incluye Definition of v1.0.0, Stack decisions y Fuera de alcance
+- ROADMAP marcado como consumible por Cursor y referenciado desde 20_PROJECT_BOOTSTRAP.mdc
+- Tests: cobertura de secciones del ROADMAP para stacks node-ts/nextjs/python
+
 ## [0.5.2] - 2025-02-12
 
 - Repo Bootstrap: el wizard genera en el proyecto destino `.github/pull_request_template.md`, `.github/ISSUE_TEMPLATE/config.yml` y `CHANGELOG.md` mínimo. Alineación con RG-02.

@@ -138,6 +138,34 @@ describe("writeProject", () => {
     assert.ok(changelog.includes("App de prueba"));
   });
 
+  it("genera ROADMAP con Definition of v1.0.0, Fuera de alcance y Stack decisions (v0.5.3)", () => {
+    const tmp = makeTmpDir();
+    const outDir = join(tmp, "dest");
+    const bp = buildBlueprint(FIXTURE_ANSWERS);
+    writeProject(bp, outDir);
+    const roadmap = readFileSync(join(outDir, "ROADMAP.md"), "utf-8");
+    assert.ok(roadmap.includes("## Definition of v1.0.0"), "ROADMAP debe contener sección Definition of v1.0.0");
+    assert.ok(roadmap.includes("mi-app-test") || roadmap.includes("App de prueba"), "ROADMAP debe incluir datos del blueprint");
+    assert.ok(roadmap.includes("node-ts"), "ROADMAP debe referenciar el stack del blueprint");
+    assert.ok(roadmap.includes("## Fuera de alcance"), "ROADMAP debe contener sección Fuera de alcance");
+    assert.ok(roadmap.includes("No inventar dependencias") || roadmap.includes("no inventar dependencias"), "ROADMAP debe incluir límite de dependencias");
+    assert.ok(roadmap.includes("## Stack decisions"), "ROADMAP debe contener sección Stack decisions");
+  });
+
+  it("ROADMAP incluye stack elegido para python y nextjs", () => {
+    const tmp = makeTmpDir();
+    const outDir = join(tmp, "dest");
+    const bpPy = buildBlueprint({ ...FIXTURE_ANSWERS, stack: "python" });
+    writeProject(bpPy, outDir);
+    const roadmapPy = readFileSync(join(outDir, "ROADMAP.md"), "utf-8");
+    assert.ok(roadmapPy.includes("python"));
+    const bpNext = buildBlueprint({ ...FIXTURE_ANSWERS, stack: "nextjs" });
+    const outDirNext = join(tmp, "dest-next");
+    writeProject(bpNext, outDirNext);
+    const roadmapNext = readFileSync(join(outDirNext, "ROADMAP.md"), "utf-8");
+    assert.ok(roadmapNext.includes("nextjs"));
+  });
+
   it("determinismo: dos buildBlueprint con mismas respuestas → mismo JSON", () => {
     const bp1 = buildBlueprint(FIXTURE_ANSWERS);
     const bp2 = buildBlueprint(FIXTURE_ANSWERS);
