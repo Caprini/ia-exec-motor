@@ -17,6 +17,18 @@ import {
   renderPullRequestTemplate,
   renderIssueTemplateConfig,
   renderChangelog,
+  renderCursorRules,
+  renderContextStack,
+  renderContextDecisions,
+  renderContextConstraints,
+  renderContextRequirements,
+  renderContextInterfaces,
+  renderDocsArchitecture,
+  renderDocsDecisions,
+  renderDocsQA,
+  renderDocsOnboarding,
+  renderLicenseMIT,
+  renderCodeowners,
 } from "./templates/index.js";
 
 export interface WriteProjectOptions {
@@ -61,4 +73,17 @@ export function writeProject(blueprint: ProjectBlueprint, outDir: string, option
   write(".github/pull_request_template.md", renderPullRequestTemplate(blueprint), ".github/pull_request_template.md");
   write(".github/ISSUE_TEMPLATE/config.yml", renderIssueTemplateConfig(blueprint), ".github/ISSUE_TEMPLATE/config.yml");
   write("CHANGELOG.md", renderChangelog(blueprint), "CHANGELOG.md");
+
+  write(".cursorrules", renderCursorRules(blueprint), ".cursorrules");
+  write("context/STACK.md", renderContextStack(blueprint), "context/STACK.md");
+  write("context/DECISIONS.md", renderContextDecisions(blueprint), "context/DECISIONS.md");
+  write("context/CONSTRAINTS.md", renderContextConstraints(blueprint), "context/CONSTRAINTS.md");
+  write("context/REQUIREMENTS.md", renderContextRequirements(blueprint), "context/REQUIREMENTS.md");
+  write("context/INTERFACES.md", renderContextInterfaces(blueprint), "context/INTERFACES.md");
+  write("docs/ARCHITECTURE.md", renderDocsArchitecture(blueprint), "docs/ARCHITECTURE.md");
+  write("docs/DECISIONS.md", renderDocsDecisions(blueprint), "docs/DECISIONS.md");
+  write("docs/QA.md", renderDocsQA(blueprint), "docs/QA.md");
+  write("docs/ONBOARDING.md", renderDocsOnboarding(blueprint), "docs/ONBOARDING.md");
+  write("LICENSE", renderLicenseMIT(), "LICENSE");
+  write("CODEOWNERS", renderCodeowners(), "CODEOWNERS");
 }

@@ -1,6 +1,6 @@
 {
   "name": "ia-exec-motor",
-  "version": "0.5.3",
+  "version": "0.5.5",
   "description": "CLI que valida InstructionRequest, aplica Quality Profile + Gates y genera reportes",
   "type": "module",
   "main": "dist/cli.js",

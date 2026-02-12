@@ -28,7 +28,7 @@ describe("buildBlueprint", () => {
     assert.strictEqual(bp.qualityProfile, "Standard");
     assert.deepStrictEqual(bp.governanceToggles, FIXTURE_ANSWERS.governanceToggles);
     assert.strictEqual(bp.generatedBy, "ia-exec-motor");
-    assert.strictEqual(bp.generatedVersion, "0.5.2");
+    assert.strictEqual(bp.generatedVersion, "0.5.5");
   });
 
   it("Strict → strictMode true y toggles requireNoRegression/requireLogs activos", () => {
@@ -104,10 +104,47 @@ describe("writeProject", () => {
       ".github/pull_request_template.md",
       ".github/ISSUE_TEMPLATE/config.yml",
       "CHANGELOG.md",
+      ".cursorrules",
+      "context/STACK.md",
+      "context/DECISIONS.md",
+      "context/CONSTRAINTS.md",
+      "context/REQUIREMENTS.md",
+      "context/INTERFACES.md",
+      "docs/ARCHITECTURE.md",
+      "docs/DECISIONS.md",
+      "docs/QA.md",
+      "docs/ONBOARDING.md",
+      "LICENSE",
+      "CODEOWNERS",
     ];
     for (const rel of required) {
       assert.ok(existsSync(join(outDir, rel)), `debe existir ${rel}`);
     }
+  });
+
+  it("genera .cursorrules, context/, docs extra, LICENSE y CODEOWNERS (v0.5.5)", () => {
+    const tmp = makeTmpDir();
+    const outDir = join(tmp, "dest");
+    const bp = buildBlueprint(FIXTURE_ANSWERS);
+    writeProject(bp, outDir);
+    const cursorrules = readFileSync(join(outDir, ".cursorrules"), "utf-8");
+    const stackMd = readFileSync(join(outDir, "context", "STACK.md"), "utf-8");
+    const decisionsMd = readFileSync(join(outDir, "context", "DECISIONS.md"), "utf-8");
+    const codeowners = readFileSync(join(outDir, "CODEOWNERS"), "utf-8");
+    const license = readFileSync(join(outDir, "LICENSE"), "utf-8");
+    assert.ok(cursorrules.includes("Prompt Anatomy"), ".cursorrules debe incluir Prompt Anatomy");
+    assert.ok(cursorrules.includes("Scope Guard"), ".cursorrules debe incluir Scope Guard");
+    assert.ok(cursorrules.includes("SCOPE-01"), ".cursorrules debe incluir SCOPE-01");
+    assert.ok(cursorrules.includes("No-regression"), ".cursorrules debe incluir No-regression");
+    assert.ok(cursorrules.includes("Context anchoring"), ".cursorrules debe incluir Context anchoring");
+    assert.ok(cursorrules.includes("Non-negotiables"), ".cursorrules debe incluir Non-negotiables");
+    assert.ok(cursorrules.includes("**Standard**"), ".cursorrules debe incluir el perfil del blueprint (Standard)");
+    assert.ok(stackMd.includes("node-ts"), "context/STACK.md debe mencionar el stack del blueprint");
+    assert.ok(decisionsMd.includes("no editar historia"), "context/DECISIONS.md debe incluir regla no editar historia");
+    assert.ok(decisionsMd.includes("Licencia MIT") || decisionsMd.includes("licencia MIT"), "context/DECISIONS.md debe incluir decisión licencia MIT");
+    assert.ok(decisionsMd.includes("CODEOWNERS") && decisionsMd.includes("placeholder"), "context/DECISIONS.md debe incluir owners CODEOWNERS placeholder");
+    assert.ok(codeowners.includes("@Caprini"), "CODEOWNERS debe contener @Caprini");
+    assert.ok(license.includes("MIT License"), "LICENSE debe contener MIT License");
   });
 
   it("determinismo: mismas respuestas → mismo project.json", () => {
@@ -120,6 +157,21 @@ describe("writeProject", () => {
     const raw1 = readFileSync(join(out1, "blueprint", "project.json"), "utf-8");
     const raw2 = readFileSync(join(out2, "blueprint", "project.json"), "utf-8");
     assert.strictEqual(raw1, raw2);
+  });
+
+  it("determinismo: mismos artefactos v0.5.5 en dos escrituras", () => {
+    const tmp = makeTmpDir();
+    const out1 = join(tmp, "a");
+    const out2 = join(tmp, "b");
+    const bp = buildBlueprint(FIXTURE_ANSWERS);
+    writeProject(bp, out1);
+    writeProject(bp, out2);
+    const cursorrules1 = readFileSync(join(out1, ".cursorrules"), "utf-8");
+    const cursorrules2 = readFileSync(join(out2, ".cursorrules"), "utf-8");
+    const stack1 = readFileSync(join(out1, "context", "STACK.md"), "utf-8");
+    const stack2 = readFileSync(join(out2, "context", "STACK.md"), "utf-8");
+    assert.strictEqual(cursorrules1, cursorrules2);
+    assert.strictEqual(stack1, stack2);
   });
 
   it("genera .github templates y CHANGELOG (Repo Bootstrap)", () => {

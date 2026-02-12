@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.5.5] - 2026-02-12
+
+- Wizard: alinea .cursorrules (ES) con governance spec (SCOPE-01, prompt anatomy, no-regression, context anchoring)
+- Wizard: context/ y docs mínimos ajustados para reducir drift y alucinaciones
+- Tests: asserts de contenido actualizados para el nuevo pack determinista
+
+## [0.5.4] - 2026-02-12
+
+- Wizard: genera .cursorrules (governance base), context pack (STACK, DECISIONS, CONSTRAINTS, REQUIREMENTS, INTERFACES), docs pack (ARCHITECTURE, DECISIONS, QA, ONBOARDING), LICENSE MIT, CODEOWNERS.
+
 ## [0.5.3] - 2026-02-12
 
 - Wizard: ROADMAP.md del proyecto destino ahora incluye Definition of v1.0.0, Stack decisions y Fuera de alcance
